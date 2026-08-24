@@ -1,0 +1,306 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const dailyPosts = await getCollection('daily');
+const sorted = dailyPosts.sort((a, b) => b.data.date.localeCompare(a.data.date));
+const newsItems = (await getCollection('news'))
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .slice(0, 120)
+  .map((item) => {
+    let source = 'Other';
+    try {
+      source = new URL(item.data.originalUrl).hostname.replace(/^www\./, '');
+    } catch {
+      // Keep a stable fallback for older generated content with relative URLs.
+    }
+
+    return { ...item, source };
+  });
+const sources = [...new Set(newsItems.map((item) => item.source))].sort();
+const latestDate = sorted[0]?.data.date;
+---
+
+<Layout title="AI News Tracker - 每日 AI 情报">
+  <section class="hero">
+    <p class="eyebrow">AI INTELLIGENCE DASHBOARD</p>
+    <h1>See the signal.<br /><span>Skip the noise.</span></h1>
+    <p class="subtitle">追踪全球 AI 产品、研究与产业动态，每日自动聚合并生成中英双语摘要。</p>
+    <div class="stats" aria-label="Tracker statistics">
+      <div><strong>{newsItems.length}</strong><span>近期文章</span></div>
+      <div><strong>{sources.length}</strong><span>活跃来源</span></div>
+      <div><strong>{sorted.length}</strong><span>历史日报</span></div>
+      <div><strong>{latestDate ?? '—'}</strong><span>最后更新</span></div>
+    </div>
+  </section>
+
+  {newsItems.length === 0 ? (
+    <section class="empty">
+      <p>No tracked stories yet. Run the generation pipeline to create the first digest.</p>
+      <p>暂时没有新闻，请先运行日报生成流程。</p>
+    </section>
+  ) : (
+    <section class="tracker" aria-labelledby="latest-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LATEST SIGNALS</p>
+          <h2 id="latest-heading">最新 AI 动态</h2>
+        </div>
+        {latestDate && <a class="digest-link" href={`/daily/${latestDate}`}>阅读今日日报 →</a>}
+      </div>
+
+      <div class="controls">
+        <label class="search-control">
+          <span class="sr-only">搜索新闻</span>
+          <input id="news-search" type="search" placeholder="搜索公司、模型或主题…" autocomplete="off" />
+        </label>
+        <label>
+          <span class="sr-only">按来源筛选</span>
+          <select id="source-filter">
+            <option value="">所有来源</option>
+            {sources.map((source) => <option value={source}>{source}</option>)}
+          </select>
+        </label>
+      </div>
+
+      <p class="results-meta" id="results-meta">显示 {newsItems.length} 条近期动态</p>
+      <div class="news-grid" id="news-grid">
+        {newsItems.map((item) => (
+          <article class="news-card" data-title={item.data.title.toLowerCase()} data-source={item.source}>
+            <div class="card-meta">
+              <span class="source">{item.source}</span>
+              <time datetime={item.data.date}>{item.data.date}</time>
+            </div>
+            <h3><a href={`/news/${item.id}`}>{item.data.title}</a></h3>
+            <a class="card-action" href={`/news/${item.id}`}>查看双语摘要 <span>↗</span></a>
+          </article>
+        ))}
+      </div>
+      <p class="no-results" id="no-results" hidden>没有匹配的新闻，试试其他关键词或来源。</p>
+    </section>
+  )}
+
+  <script>
+    const search = document.querySelector<HTMLInputElement>('#news-search');
+    const source = document.querySelector<HTMLSelectElement>('#source-filter');
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.news-card'));
+    const meta = document.querySelector<HTMLElement>('#results-meta');
+    const empty = document.querySelector<HTMLElement>('#no-results');
+
+    function filterNews() {
+      const query = search?.value.trim().toLowerCase() ?? '';
+      const selectedSource = source?.value ?? '';
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const matchesQuery = !query || card.dataset.title?.includes(query);
+        const matchesSource = !selectedSource || card.dataset.source === selectedSource;
+        const show = Boolean(matchesQuery && matchesSource);
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+
+      if (meta) meta.textContent = `显示 ${visible} 条近期动态`;
+      if (empty) empty.hidden = visible !== 0;
+    }
+
+    search?.addEventListener('input', filterNews);
+    source?.addEventListener('change', filterNews);
+  </script>
+</Layout>
+
+<style>
+  .hero {
+    padding: 4.5rem 0 3rem;
+  }
+
+  .hero h1 {
+    margin-top: 0;
+    max-width: 760px;
+    font-size: clamp(2.8rem, 9vw, 5.8rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+  }
+
+  .hero h1 span {
+    color: var(--color-accent);
+  }
+
+  .subtitle {
+    max-width: 640px;
+    margin-top: 1.5rem;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.75rem;
+    color: var(--color-accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 3rem;
+    border-block: 1px solid var(--color-border);
+  }
+
+  .stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 1rem;
+    border-right: 1px solid var(--color-border);
+  }
+
+  .stats div:first-child { padding-left: 0; }
+  .stats div:last-child { border-right: 0; }
+  .stats strong { font-size: 1.15rem; }
+  .stats span { color: var(--color-text-muted); font-size: 0.72rem; }
+
+  .section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 1.75rem;
+  }
+
+  .digest-link {
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--color-text-muted);
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr minmax(180px, 0.32fr);
+    gap: 0.75rem;
+  }
+
+  .controls input,
+  .controls select {
+    width: 100%;
+    height: 46px;
+    padding: 0 0.9rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text);
+    font: inherit;
+    font-size: 0.84rem;
+  }
+
+  .controls input:focus,
+  .controls select:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .results-meta {
+    margin: 1rem 0;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .news-card {
+    display: flex;
+    min-height: 210px;
+    flex-direction: column;
+    padding: 1.1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .news-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .news-card[hidden] { display: none; }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: var(--color-text-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.66rem;
+  }
+
+  .source {
+    max-width: 68%;
+    overflow: hidden;
+    color: var(--color-accent);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .news-card h3 {
+    margin: 1.25rem 0;
+    padding: 0;
+    border: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .news-card h3 a { color: var(--color-text); text-decoration: none; }
+
+  .card-action {
+    margin-top: auto;
+    font-size: 0.72rem;
+    text-decoration: none;
+  }
+
+  .no-results {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding-top: 3rem; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stats div:nth-child(2) { border-right: 0; }
+    .stats div:nth-child(-n + 2) { border-bottom: 1px solid var(--color-border); }
+    .stats div:nth-child(3) { padding-left: 0; }
+    .controls, .news-grid { grid-template-columns: 1fr; }
+    .section-heading { align-items: flex-start; flex-direction: column; }
+  }
+</style>

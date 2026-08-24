@@ -1,0 +1,159 @@
+---
+title: "From Angular.js to Fine-Grained Reactivity: Part 2 — The JS Proxy Runtime"
+originalUrl: "https://dev.to/straccia17/from-angularjs-to-fine-grained-reactivity-part-2-the-js-proxy-runtime-2m60"
+date: "2026-07-05T22:20:19.361Z"
+---
+
+# From Angular.js to Fine-Grained Reactivity: Part 2 — The JS Proxy Runtime
+# 从 Angular.js 到细粒度响应式：第二部分 — JS Proxy 运行时
+
+In the first article of this series, we saw how a custom build-time compiler can transform a legacy Angular.js template into raw, optimized JavaScript. To recap, starting from this template:
+在本系列的第一篇文章中，我们探讨了自定义编译时编译器如何将传统的 Angular.js 模板转换为原生、优化的 JavaScript。回顾一下，从这个模板开始：
+
+```html
+<!-- simple.html -->
+<p>Hello {{ name }}!</p>
+```
+
+Our Go compiler generates the following JavaScript module:
+我们的 Go 编译器会生成以下 JavaScript 模块：
+
+```javascript
+// simple.js
+export function template() {
+  const p_0 = document.createElement("p");
+  const text_1 = document.createTextNode("");
+  p_0.append(text_1);
+  return {
+    mount(container) {
+      container.append(p_0);
+    },
+    update(change) {
+      if ("name" in change) {
+        text_1.data = "Hello " + change.name + "!";
+      }
+    }
+  }
+}
+```
+
+This is incredibly clean. By running `template()`, we get an object with `mount` and `update` methods. Using `mount` is fully intuitive: we pass a reference to a DOM element, and it injects our empty paragraph (`p_0`) into it:
+这非常简洁。通过运行 `template()`，我们得到了一个包含 `mount` 和 `update` 方法的对象。使用 `mount` 非常直观：我们传入一个 DOM 元素的引用，它就会将空的段落 (`p_0`) 注入其中：
+
+```javascript
+import { template } from './simple.js';
+const { mount, update } = template();
+const container = document.getElementById('view-container');
+mount(container); 
+// The DOM now contains: <p></p> (waiting for data)
+// 此时 DOM 包含：<p></p>（等待数据）
+```
+
+However, the paragraph remains empty until we call `update` with a change object like this:
+然而，在调用带有变更对象的 `update` 方法之前，段落将保持为空：
+
+```javascript
+let changes = { name: "Mario", };
+update(changes);
+// The DOM surgically updates to: <p>Hello Mario!</p>
+// DOM 精准更新为：<p>Hello Mario!</p>
+```
+
+But who is responsible for tracking changes in our application state, building this changes object, and calling `update`? The answer lies in marrying the legacy Angular.js `$scope` with the modern JavaScript `Proxy` API.
+但是，谁来负责追踪应用状态的变化、构建这个变更对象并调用 `update` 呢？答案在于将传统的 Angular.js `$scope` 与现代 JavaScript `Proxy` API 结合起来。
+
+### The Legacy State Pattern
+### 传统状态模式
+
+In a traditional Angular.js application, developers mutate the state directly inside a controller by assigning properties to the `$scope` object:
+在传统的 Angular.js 应用中，开发者通过给 `$scope` 对象赋值，直接在控制器内部修改状态：
+
+```javascript
+// simple-controller.js
+export function SimpleController($scope) {
+  $scope.name = "Mario";
+}
+```
+
+To bridge the gap between this legacy controller and our new build-time template, we need a way to automatically capture the assignment `$scope.name = "Mario"` and translate it into a structured update: `let changes = { name: "Mario" };`. Instead of running a heavy runtime digest cycle to dirty-check the entire scope, we can intercept these mutations at the exact moment they happen. This is where Proxies shine.
+为了弥合这个传统控制器与我们新的编译时模板之间的鸿沟，我们需要一种方法来自动捕获 `$scope.name = "Mario"` 这一赋值操作，并将其转换为结构化的更新：`let changes = { name: "Mario" };`。与其运行沉重的运行时摘要循环（digest cycle）来对整个作用域进行脏检查，我们可以在变更发生的瞬间拦截它们。这就是 `Proxy` 大显身手的地方。
+
+### How the JavaScript Proxy API Saves the Day
+### JavaScript Proxy API 如何解决问题
+
+The `Proxy` object allows us to wrap a target object and intercept fundamental operations, such as property lookups, assignments, and function invocations. By wrapping our `$scope` in a `Proxy` before passing it to the controller, we can execute custom code whenever a property is set. Let's look at how we can implement a basic `set` trap:
+`Proxy` 对象允许我们包装一个目标对象，并拦截基本操作，如属性查找、赋值和函数调用。通过在将 `$scope` 传递给控制器之前用 `Proxy` 对其进行包装，我们可以在属性被设置时执行自定义代码。让我们看看如何实现一个基本的 `set` 陷阱：
+
+```javascript
+import { SimpleController } from './simple-controller.js';
+
+// Define a handler with a "set" trap
+// 定义一个带有 "set" 陷阱的处理器
+const handler = {
+  set(target, prop, value) {
+    console.log(`Property "${prop}" changed to: ${value}`);
+    target[prop] = value;
+    return true;
+  }
+};
+
+// Wrap an empty object with our Proxy handler
+// 用我们的 Proxy 处理器包装一个空对象
+const $scope = new Proxy({}, handler);
+
+// Run the legacy controller with our reactive scope
+// 使用我们的响应式作用域运行传统控制器
+SimpleController($scope); 
+// Console logs: Property "name" changed to: Mario
+// 控制台输出：Property "name" changed to: Mario
+```
+
+Every time the controller executes `$scope.name = "Mario"`, our `Proxy` intercepts the assignment. We now have a lightweight, non-invasive mechanism to capture state mutations in real time.
+每当控制器执行 `$scope.name = "Mario"` 时，我们的 `Proxy` 就会拦截该赋值操作。现在，我们拥有了一种轻量级、非侵入式的机制来实时捕获状态变更。
+
+### Putting It All Together: The Runtime Connection
+### 整合：运行时连接
+
+Now we can connect our `Proxy`-based `$scope` directly to the `update` method generated by our compiler. Here is the complete runtime implementation:
+现在，我们可以将基于 `Proxy` 的 `$scope` 直接连接到编译器生成的 `update` 方法。以下是完整的运行时实现：
+
+```javascript
+import { SimpleController } from './simple-controller.js';
+import { template } from './simple.js';
+
+// 1. Initialize the compiled template and mount it
+// 1. 初始化编译后的模板并挂载
+const { mount, update } = template();
+const container = document.getElementById('view-container');
+mount(container);
+
+// 2. Create the reactive $scope using a Proxy
+// 2. 使用 Proxy 创建响应式 $scope
+const $scope = new Proxy({}, {
+  set(target, prop, value) {
+    // Intercept mutation, build the change object, and trigger the DOM update
+    // 拦截变更，构建变更对象，并触发 DOM 更新
+    update({ [prop]: value });
+    return Reflect.set(target, prop, value);
+  }
+});
+
+// 3. Execute the controller to trigger the initial render
+// 3. 执行控制器以触发初始渲染
+SimpleController($scope);
+```
+
+The result: The controller runs and executes `$scope.name = "Mario"`. The `Proxy` intercepts the write and immediately triggers `update({ name: "Mario" })`. The compiled `update` function surgically targets the `TextNode` and updates the text to "Hello Mario!". Zero dirty-checking, zero Virtual DOM, zero external dependencies.
+结果是：控制器运行并执行 `$scope.name = "Mario"`。`Proxy` 拦截了写入操作并立即触发 `update({ name: "Mario" })`。编译后的 `update` 函数精准定位到 `TextNode` 并将文本更新为 "Hello Mario!"。零脏检查，零虚拟 DOM，零外部依赖。
+
+### What’s Next?
+### 接下来是什么？
+
+While this reactive loop is extremely elegant, real-world enterprise applications are rarely this simple. What happens when a controller updates multiple properties in a row? In our current basic implementation, changing three properties sequentially would trigger three immediate, synchronous DOM repaints. To prevent layout thrashing, we need to implement a batching mechanism to queue updates and flush them once per frame. Furthermore, how do we handle nested objects, arrays, and dependency tracking (Signals)?
+虽然这个响应式循环非常优雅，但现实中的企业级应用很少如此简单。当控制器连续更新多个属性时会发生什么？在我们当前的基础实现中，连续更改三个属性会触发三次立即的、同步的 DOM 重绘。为了防止布局抖动（layout thrashing），我们需要实现一个批处理机制来对更新进行排队，并在每帧刷新一次。此外，我们该如何处理嵌套对象、数组和依赖追踪（Signals）？
+
+In the next part of this series, we will explore how we scaled this runtime architecture to handle production-grade state management. Stay tuned!
+在本系列的下一部分中，我们将探讨如何扩展此运行时架构以处理生产级的状态管理。敬请期待！
+
+Thanks for reading! I’m a Frontend Architect passionate about compilers, reactivity, and performance. Let's connect on LinkedIn to stay updated with the next parts of this journey.
+感谢阅读！我是一名热衷于编译器、响应式和性能的前端架构师。欢迎在 LinkedIn 上与我联系，以获取本系列的后续更新。

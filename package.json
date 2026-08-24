@@ -1,0 +1,30 @@
+{
+  "name": "ai-news",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "AI-powered daily news aggregator with bilingual summaries",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "generate": "tsx scripts/main.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/google": "^1.0.0",
+    "@ai-sdk/openai": "^1.0.0",
+    "@astrojs/cloudflare": "^12.0.0",
+    "ai": "^4.0.0",
+    "astro": "^5.0.0",
+    "cheerio": "^1.0.0",
+    "dotenv": "^17.4.1",
+    "https-proxy-agent": "^9.0.0",
+    "node-fetch": "^3.3.2",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@9.14.2"
+}

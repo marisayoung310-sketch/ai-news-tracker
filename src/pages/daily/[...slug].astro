@@ -1,0 +1,665 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('daily');
+  const sorted = posts.sort((a, b) => a.data.date.localeCompare(b.data.date));
+  return sorted.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      prev: sorted[i - 1] ?? null,
+      next: sorted[i + 1] ?? null,
+    },
+  }));
+}
+
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
+// Only show H2s in TOC (source sections like "Hacker News", "TechCrunch")
+const tocItems = headings.filter(h => h.depth === 2);
+---
+
+<Layout title={post.data.title} backUrl="/">
+  {tocItems.length > 1 && (
+    <nav class="toc">
+      {tocItems.map(h => (
+        <a href={`#${h.slug}`} class="toc-item">{h.text}</a>
+      ))}
+    </nav>
+  )}
+
+  <article>
+    <Content />
+  </article>
+
+  <!-- WeChat Share & Bookmark Bar -->
+  <div class="share-bar" id="share-bar">
+    <span class="share-bar-label">分享文章</span>
+    <div class="share-bar-actions">
+      <button class="share-btn wechat-share" id="btn-wechat-share" aria-label="分享到微信">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.328.328 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05a6.127 6.127 0 0 1-.253-1.734c0-3.407 3.167-6.175 7.063-6.175.381 0 .752.034 1.114.09C16.789 5.381 13.166 2.188 8.691 2.188zm-2.6 4.408c.56 0 1.016.455 1.016 1.016s-.455 1.016-1.016 1.016S5.075 8.172 5.075 7.612s.455-1.016 1.016-1.016zm5.215 0c.56 0 1.016.455 1.016 1.016s-.455 1.016-1.016 1.016-1.016-.455-1.016-1.016.456-1.016 1.016-1.016zm4.006 3.585c-3.385 0-6.134 2.326-6.134 5.194 0 2.87 2.749 5.194 6.134 5.194.466 0 .92-.048 1.362-.132a.726.726 0 0 1 .6.082l1.473.86a.27.27 0 0 0 .138.045c.132 0 .24-.108.24-.24 0-.06-.023-.118-.038-.174l-.3-1.146a.498.498 0 0 1 .177-.555C22.917 18.457 24 16.686 24 14.375c0-2.868-2.749-5.194-6.134-5.194h.912zm-2.136 2.98c.467 0 .847.38.847.847s-.38.847-.847.847a.848.848 0 0 1-.847-.847c0-.467.38-.847.847-.847zm4.272 0c.467 0 .847.38.847.847s-.38.847-.847.847a.848.848 0 0 1-.847-.847c0-.467.38-.847.847-.847z"/></svg>
+        <span>分享到微信</span>
+      </button>
+      <button class="share-btn wechat-fav" id="btn-wechat-fav" aria-label="收藏到微信">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>收藏到微信</span>
+      </button>
+      <a href={`https://github.com/tianyaxiang/ai-news/edit/main/src/content/daily/${post.id}.md`} target="_blank" rel="noopener noreferrer" class="share-btn edit-on-github" id="btn-edit-github">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span>编辑 / Edit</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="qr-modal-overlay" id="qr-modal-overlay">
+    <div class="qr-modal">
+      <button class="qr-modal-close" id="qr-modal-close" aria-label="关闭">✕</button>
+      <div class="qr-modal-icon" id="qr-modal-icon"></div>
+      <h3 class="qr-modal-title" id="qr-modal-title"></h3>
+      <p class="qr-modal-desc" id="qr-modal-desc"></p>
+      <div class="qr-modal-code" id="qr-modal-code">
+        <div class="qr-loading">生成二维码中...</div>
+      </div>
+      <div class="qr-modal-steps" id="qr-modal-steps"></div>
+    </div>
+  </div>
+
+  <!-- WeChat Guide Overlay -->
+  <div class="wechat-guide-overlay" id="wechat-guide-overlay">
+    <div class="wechat-guide-content">
+      <div class="wechat-guide-arrow">↗</div>
+      <div class="wechat-guide-text">
+        <p>请点击右上角 <span style="font-weight: bold; font-size: 1.2rem;">···</span></p>
+        <p>选择 <span style="color: #07c160;">发送给朋友</span> 或 <span style="color: #07c160;">收藏</span></p>
+      </div>
+      <button class="wechat-guide-btn" id="wechat-guide-close">我知道了</button>
+    </div>
+  </div>
+
+
+  <nav class="day-nav">
+    {prev ? (
+      <a href={`/daily/${prev.id}`} class="day-nav-link prev">
+        <span class="day-nav-label">上一天</span>
+        <span class="day-nav-date">{prev.data.date}</span>
+      </a>
+    ) : <span />}
+    {next ? (
+      <a href={`/daily/${next.id}`} class="day-nav-link next">
+        <span class="day-nav-label">下一天</span>
+        <span class="day-nav-date">{next.data.date}</span>
+      </a>
+    ) : <span />}
+  </nav>
+</Layout>
+
+<style>
+  /* TOC navigation */
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    position: sticky;
+    top: 4px;
+    z-index: 10;
+  }
+
+  .toc-item {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.6rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .toc-item:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  /* Article styling - turn hr-separated sections into cards */
+  article {
+    line-height: 1.8;
+  }
+
+  article :global(h2) {
+    margin-top: 2.5rem;
+    scroll-margin-top: 3.5rem;
+  }
+
+  article :global(h3) {
+    margin-top: 1.25rem;
+    color: var(--color-text);
+  }
+
+  article :global(hr) {
+    border: none;
+    margin: 1.5rem 0;
+  }
+
+  article :global(hr + h3),
+  article :global(h2 + h3) {
+    background: var(--color-card, var(--color-surface));
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+
+  article :global(h3 + h3) {
+    background: var(--color-card, var(--color-surface));
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    padding: 0.5rem 1rem;
+    margin-top: -1px;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  article :global(a[href^="http"]) {
+    word-break: break-all;
+  }
+
+  /* "Read more" links */
+  article :global(p > a[href^="http"]:only-child) {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    transition: border-color 0.2s;
+  }
+
+  article :global(p > a[href^="http"]:only-child:hover) {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  /* Prev/Next day navigation */
+  .day-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    gap: 1rem;
+  }
+
+  .day-nav-link {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+
+  .day-nav-link:hover {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .day-nav-link.next {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .day-nav-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .day-nav-date {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    font-family: monospace;
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .toc {
+      gap: 0.35rem;
+      padding: 0.5rem;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      top: 0;
+      border-radius: 0;
+      margin-left: -0.75rem;
+      margin-right: -0.75rem;
+      width: calc(100% + 1.5rem);
+    }
+
+    .toc-item {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      flex-shrink: 0;
+    }
+
+    article :global(h2) {
+      font-size: 1.1rem;
+      scroll-margin-top: 3rem;
+    }
+
+    .day-nav {
+      gap: 0.5rem;
+    }
+
+    .day-nav-link {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+
+
+
+  /* ===== WeChat Guide Overlay ===== */
+  .wechat-guide-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .wechat-guide-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  .wechat-guide-content {
+    width: 100%;
+    padding: 2rem;
+    text-align: right;
+    color: white;
+  }
+  .wechat-guide-arrow {
+    font-size: 4rem;
+    line-height: 1;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    animation: bounceRight 1s infinite alternate;
+  }
+  .wechat-guide-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .wechat-guide-btn {
+    display: block;
+    margin: 0 auto;
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 0.5rem 2rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  @keyframes bounceRight {
+    from { transform: translate(0, 0); }
+    to { transform: translate(10px, -10px); }
+  }
+
+  /* ===== Share Bar ===== */
+  .share-bar {
+    margin-top: 2.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .share-bar-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .share-bar-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+  }
+
+  .share-btn:hover {
+    border-color: #07c160;
+    color: #07c160;
+    background: rgba(7, 193, 96, 0.06);
+  }
+
+  .share-btn svg {
+    flex-shrink: 0;
+  }
+
+  .share-btn.wechat-share:hover svg,
+  .share-btn.wechat-fav:hover svg {
+    color: #07c160;
+  }
+
+  .share-btn.edit-on-github {
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .share-btn.edit-on-github:hover {
+    border-color: #2ea44f;
+    color: #2ea44f;
+    background: rgba(46, 164, 79, 0.06);
+    text-decoration: none;
+  }
+
+  .share-btn.edit-on-github:hover svg {
+    color: #2ea44f;
+  }
+
+  /* ===== QR Modal ===== */
+  .qr-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .qr-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .qr-modal {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 2rem 2rem 1.75rem;
+    width: 90%;
+    max-width: 360px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+    transform: translateY(20px) scale(0.96);
+    transition: transform 0.3s ease;
+  }
+
+  .qr-modal-overlay.active .qr-modal {
+    transform: translateY(0) scale(1);
+  }
+
+  .qr-modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .qr-modal-close:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .qr-modal-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .qr-modal-title {
+    font-size: 1.15rem;
+    margin: 0 0 0.35rem;
+    color: var(--color-text);
+    border: none;
+    padding: 0;
+  }
+
+  .qr-modal-desc {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .qr-modal-code {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .qr-modal-code img {
+    border-radius: 8px;
+    width: 200px;
+    height: 200px;
+    background: #fff;
+    padding: 8px;
+  }
+
+  .qr-loading {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface);
+    border-radius: 8px;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  .qr-modal-steps {
+    text-align: left;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border-radius: 8px;
+  }
+
+  .qr-modal-steps .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #07c160;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-right: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .qr-modal-steps p {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.25rem;
+  }
+
+  .qr-modal-steps p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 640px) {
+    .share-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .share-bar-actions {
+      flex-direction: column;
+    }
+
+    .share-btn {
+      justify-content: center;
+    }
+
+    .qr-modal {
+      padding: 1.5rem 1.25rem 1.25rem;
+    }
+
+    .qr-modal-code img {
+      width: 180px;
+      height: 180px;
+    }
+
+    .qr-loading {
+      width: 180px;
+      height: 180px;
+    }
+  }
+</style>
+
+<script>
+  // Detect WeChat
+  const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+  const guideOverlay = document.getElementById('wechat-guide-overlay');
+  const guideClose = document.getElementById('wechat-guide-close');
+  
+  let originalTitle = document.title;
+  let originalUrl = window.location.href;
+
+  if (guideClose && guideOverlay) {
+    guideClose.addEventListener('click', () => {
+      guideOverlay.classList.remove('active');
+      if (document.title !== originalTitle) {
+        document.title = originalTitle;
+      }
+      if (window.location.href !== originalUrl) {
+        history.replaceState(null, '', originalUrl);
+      }
+    });
+  }
+
+  // WeChat Share & Bookmark QR Modal logic
+  const overlay = document.getElementById('qr-modal-overlay')!;
+  const modalTitle = document.getElementById('qr-modal-title')!;
+  const modalDesc = document.getElementById('qr-modal-desc')!;
+  const modalIcon = document.getElementById('qr-modal-icon')!;
+  const modalCode = document.getElementById('qr-modal-code')!;
+  const modalSteps = document.getElementById('qr-modal-steps')!;
+  const btnClose = document.getElementById('qr-modal-close')!;
+  const btnShare = document.getElementById('btn-wechat-share')!;
+  const btnFav = document.getElementById('btn-wechat-fav')!;
+
+  function openModal(mode: 'share' | 'fav', urlToShare: string, itemTitle?: string) {
+    if (isWeChat && guideOverlay) {
+      if (itemTitle) {
+        originalTitle = document.title;
+        originalUrl = window.location.href;
+        document.title = itemTitle;
+        history.replaceState(null, '', urlToShare);
+      }
+      guideOverlay.classList.add('active');
+      return;
+    }
+
+    const pageUrl = encodeURIComponent(urlToShare);
+    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${pageUrl}`;
+
+    if (mode === 'share') {
+      modalIcon.textContent = '💬';
+      modalTitle.textContent = '分享到微信';
+      modalDesc.textContent = '使用微信「扫一扫」扫描二维码，即可分享给好友或朋友圈';
+      modalSteps.innerHTML = `
+        <p><span class="step-num">1</span>打开微信，点击右上角 「+」</p>
+        <p><span class="step-num">2</span>选择「扫一扫」扫描下方二维码</p>
+        <p><span class="step-num">3</span>打开页面后，点击右上角 「⋯」</p>
+        <p><span class="step-num">4</span>选择「转发给朋友」或「分享到朋友圈」</p>
+      `;
+    } else {
+      modalIcon.textContent = '⭐';
+      modalTitle.textContent = '收藏到微信';
+      modalDesc.textContent = '使用微信「扫一扫」扫描二维码，即可收藏到微信';
+      modalSteps.innerHTML = `
+        <p><span class="step-num">1</span>打开微信，点击右上角 「+」</p>
+        <p><span class="step-num">2</span>选择「扫一扫」扫描下方二维码</p>
+        <p><span class="step-num">3</span>打开页面后，点击右上角 「⋯」</p>
+        <p><span class="step-num">4</span>选择「收藏」即可保存到微信收藏夹</p>
+      `;
+    }
+
+    // Load QR code image
+    modalCode.innerHTML = '<div class="qr-loading">生成二维码中...</div>';
+    const img = new Image();
+    img.onload = () => { modalCode.innerHTML = ''; modalCode.appendChild(img); };
+    img.onerror = () => { modalCode.innerHTML = '<div class="qr-loading">二维码加载失败，请刷新重试</div>'; };
+    img.src = qrApiUrl;
+    img.alt = '微信扫码';
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  btnShare.addEventListener('click', () => openModal('share', window.location.href));
+  btnFav.addEventListener('click', () => openModal('fav', window.location.href));
+  btnClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+
+</script>

@@ -1,0 +1,41 @@
+---
+title: "Granite 4.1: IBM's 8B Model Matching 32B MoE"
+originalUrl: "https://firethering.com/granite-4-1-ibm-open-source-model-family/"
+date: "2026-04-30T22:17:15.363Z"
+---
+
+# Granite 4.1: IBM's 8B Model Matching 32B MoE
+
+**Granite 4.1：IBM 的 8B 模型足以媲美四倍于其规模的模型**
+
+IBM just released Granite 4.1, a family of open source language models built specifically for enterprise use. Three sizes, Apache 2.0 licensed, trained on 15 trillion tokens with a level of pipeline obsession that’s worth understanding. One result in the benchmarks doesn’t make sense until you understand how they built it. The 8B model. Dense architecture, no MoE tricks, no extended reasoning chains. It matches or beats Granite 4.0-H-Small across basically every benchmark they ran. That older model has 32 billion parameters with 9 billion active. This one has 8 billion. That’s either very impressive or it means the old model was underbuilt. Probably both. Here’s how they built it, what the numbers actually say, and whether any of it matters for your use case.
+
+IBM 刚刚发布了 Granite 4.1，这是一个专为企业用途构建的开源语言模型系列。该系列包含三种尺寸，采用 Apache 2.0 许可，基于 15 万亿个 token 进行训练，其对训练流程的极致追求非常值得深入了解。基准测试中的一个结果在理解其构建方式之前显得有些不可思议：8B 模型。它采用密集架构，没有使用混合专家模型（MoE）技巧，也没有扩展推理链。在几乎所有运行的基准测试中，它都持平或超越了 Granite 4.0-H-Small。旧模型拥有 320 亿参数，其中 90 亿为活跃参数，而这款新模型仅有 80 亿参数。这要么说明新模型非常出色，要么说明旧模型构建不足，很可能两者皆有。以下是它们的构建方式、数据背后的真实含义，以及这对你的使用场景是否有意义。
+
+### The result that makes you do a double take
+### 令人难以置信的结果
+
+On ArenaHard, a benchmark where models are judged by GPT-4 on how well they handle 500 challenging real-world prompts, it’s one of the better proxies for actual chat quality. The 8B instruct scores 69.0 there. The previous generation Granite 4.0-H-Small, a 32B MoE model with 9B active parameters, scored lower. On BFCL V3, the standard tool calling benchmark. The 8B scores 68.3, the 32B MoE scores 64.7. GSM8K is grade-school math reasoning, and the 8B hits 92.5 there too. Across AlpacaEval, MMLU-Pro, BBH, EvalPlus, MBPP. same thing throughout. A denser, simpler, smaller model is winning. Consistently. It actually means IBM got significantly better at training between generations. The 4.0-H-Small wasn’t badly built, it was the best they had at the time. The 4.1 8B is what happens when you spend the intervening period obsessing over data quality instead of just scaling parameters. That’s the thread running through everything about how Granite 4.1 was built.
+
+在 ArenaHard（一个由 GPT-4 评估模型处理 500 个具有挑战性的真实世界提示词能力的基准测试）中，它是衡量实际对话质量的较好指标之一。8B 指令微调版得分为 69.0。上一代 Granite 4.0-H-Small（一款拥有 90 亿活跃参数的 32B MoE 模型）得分反而更低。在标准的工具调用基准测试 BFCL V3 中，8B 模型得分为 68.3，而 32B MoE 模型为 64.7。在小学数学推理基准 GSM8K 中，8B 模型也达到了 92.5 分。在 AlpacaEval、MMLU-Pro、BBH、EvalPlus 和 MBPP 等测试中，情况如出一辙。一个更密集、更简单、更小的模型正在持续胜出。这实际上意味着 IBM 在两代产品之间显著提升了训练水平。4.0-H-Small 并非构建得不好，它代表了当时 IBM 的最高水平。而 4.1 8B 的成功，是因为他们将这段时间投入到了对数据质量的极致追求上，而不是仅仅堆砌参数。这正是贯穿 Granite 4.1 构建过程的核心逻辑。
+
+### Three sizes, one obsession: how they actually built this
+### 三种尺寸，一种执着：它们是如何构建的
+
+Granite 4.1 comes in 3B, 8B, and 30B. All three use the same decoder-only dense transformer design, the same training pipeline and same data strategy. The only difference between them is size. No MoE routing, sparse layers or extended reasoning chains that inflate token counts. What you send in is what gets processed, predictably, every time. Models that lean on long reasoning traces are harder to cost-predict and harder to latency-budget. Granite 4.1 skips all of that by design. But the architecture isn’t really the story. The story is the 15 trillion tokens they trained on and how carefully they handled them. IBM ran five distinct training phases with different data mixtures, different learning rate schedules, and different goals. Phase 1 is broad: CommonCrawl at 59%, code at 20%, math at 7%. By Phase 2, math has jumped to 35% and code to 30%. By Phases 3 and 4, they’re blending in chain-of-thought reasoning trajectories and instruction data alongside the highest-quality web content they have. Phase 5 extends the context window, eventually to 512K tokens for the 8B and 30B. Most teams pick a data mix and stick with it. IBM changed theirs four times with clear intent each time.
+
+Granite 4.1 提供 3B、8B 和 30B 三种尺寸。这三者均采用相同的仅解码器（decoder-only）密集 Transformer 设计、相同的训练流程和相同的数据策略。它们唯一的区别就是规模。没有 MoE 路由、稀疏层或会增加 token 数量的扩展推理链。你输入的内容就是被处理的内容，每次都可预测。依赖长推理轨迹的模型更难预测成本，也更难控制延迟。Granite 4.1 在设计上避开了所有这些问题。但架构并不是重点，重点在于他们训练所用的 15 万亿个 token 以及他们处理这些数据时的严谨程度。IBM 进行了五个不同的训练阶段，每个阶段都有不同的数据配比、学习率计划和目标。第一阶段范围广泛：CommonCrawl 占 59%，代码占 20%，数学占 7%。到了第二阶段，数学占比跃升至 35%，代码占比升至 30%。在第三和第四阶段，他们将思维链（CoT）推理轨迹和指令数据与他们拥有的最高质量网络内容混合在一起。第五阶段扩展了上下文窗口，最终 8B 和 30B 模型达到了 512K token。大多数团队会选定一种数据配比并坚持使用，而 IBM 改变了四次，且每次都有明确的意图。
+
+### The filter that rejected bad data before it could do damage
+### 在坏数据造成损害前将其过滤掉
+
+IBM spent enough time on their data quality pipeline that it deserves its own explanation. After pre-training, they needed to turn the base model into something that actually follows instructions reliably. That requires fine-tuning on examples of good behavior but bad examples in that dataset don’t just get ignored. They get learned. A hallucinated answer, a response that ignores the instruction, a calculation that’s wrong but confident, the model treats all of it as signal. So IBM built a filtering system before a single fine-tuning sample touched the model. An LLM-as-Judge evaluated every assistant response across six dimensions including instruction following, correctness, completeness, conciseness, naturalness, and calibration. Each response got scored, and samples that fell below threshold got cut. But some things triggered automatic rejection regardless of score, hallucinations, false premises, incorrect computations. No partial credit for those. The judge wasn’t reading prompts or user inputs in isolation. It was evaluating what the model said given the full context it had access to. In RAG settings, if the response wasn’t grounded in the retrieved documents, that counted as a hallucination. In tool-calling scenarios, outputs were checked against the allowed tools and their parameter schemas. On top of that, a separate rule-based pipeline checked structure like length, formatting, schema validation, deduplication across the entire dataset. Everything was logged and auditable. What came out the other side was 4.1 million samples. That sounds like a lot. For context, it’s a deliberately curated 4.1 million.
+
+IBM 在数据质量流程上投入了足够多的时间，这值得专门解释。预训练完成后，他们需要将基础模型转化为能够可靠遵循指令的模型。这需要通过良好行为的示例进行微调，但数据集中的坏示例不会被简单忽略，它们会被模型“学习”。幻觉答案、忽略指令的回复、错误但自信的计算，模型会将这一切视为信号。因此，IBM 在任何微调样本进入模型之前就构建了一个过滤系统。一个“LLM 作为裁判”（LLM-as-Judge）系统从指令遵循、正确性、完整性、简洁性、自然度和校准度六个维度评估了每一个助手回复。每个回复都会被评分，低于阈值的样本会被剔除。但有些问题无论分数如何都会触发自动拒绝，例如幻觉、错误前提、错误计算。这些情况没有“部分得分”。裁判不是孤立地阅读提示词或用户输入，而是在模型可访问的完整上下文背景下评估其回答。在 RAG（检索增强生成）场景中，如果回复没有基于检索到的文档，则被视为幻觉。在工具调用场景中，输出会根据允许的工具及其参数模式进行检查。此外，还有一个独立的基于规则的流程检查结构，如长度、格式、模式验证以及整个数据集的去重。一切都被记录并可审计。最终产出的是 410 万个样本。这听起来很多，但实际上，这是经过精心筛选的 410 万个样本。
+
+### Four rounds of RL and why they needed all of them
+### 四轮强化学习及其必要性
+
+This is the part of the Granite 4.1 paper that I find most interesting, mostly because it’s honest about something going wrong mid-training and how they fixed it. After fine-tuning, IBM ran reinforcement learning in four sequential stages. The first stage trained the model jointly across nine domains at once including math, science, logical reasoning, instruction following, structured output, text-to-SQL, temporal reasoning, general chat, and in-context learning. The reason for doing all of them together is that joint training prevents the model from forgetting earlier domains as it gets better at later ones. Every gradient update sees the full range of tasks. Stage two was RLHF training on general chat prompts using a reward model to improve helpfulness. This worked. AlpacaEval scores jumped around 18.
+
+这是 Granite 4.1 论文中我最感兴趣的部分，主要是因为它诚实地记录了训练中途出现的问题以及他们是如何修复的。微调后，IBM 分四个连续阶段进行了强化学习。第一阶段在九个领域同时对模型进行联合训练，包括数学、科学、逻辑推理、指令遵循、结构化输出、text-to-SQL、时间推理、通用对话和上下文学习。将它们放在一起训练的原因是，联合训练可以防止模型在提升后续领域能力时“遗忘”之前的领域。每一次梯度更新都会涵盖所有任务。第二阶段是使用奖励模型对通用对话提示词进行 RLHF（人类反馈强化学习）训练，以提高有用性。这很有效，AlpacaEval 分数提升了约 18 分。

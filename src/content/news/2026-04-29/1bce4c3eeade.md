@@ -1,0 +1,70 @@
+---
+title: "Gemini 3.1 Flash TTS: the next generation of expressive AI speech"
+originalUrl: "https://deepmind.google/blog/gemini-3-1-flash-tts-the-next-generation-of-expressive-ai-speech/"
+date: "2026-04-29T07:00:38.074Z"
+---
+
+# Gemini 3.1 Flash TTS: the next generation of expressive AI speech
+# Gemini 3.1 Flash TTS：下一代富有表现力的 AI 语音技术
+
+Apr 15, 2026
+2026 年 4 月 15 日
+
+Our newest audio model introduces granular audio tags that give you precise control to direct AI speech for expressive audio generation.
+我们最新的音频模型引入了细粒度音频标签，让您可以精确控制 AI 语音，从而生成富有表现力的音频。
+
+Today, we’re introducing Gemini 3.1 Flash TTS, the latest text-to-speech model that delivers improved controllability, expressivity and quality — empowering developers, enterprises and everyday users to build the next generation of AI-speech applications.
+今天，我们推出了 Gemini 3.1 Flash TTS，这是最新的文本转语音模型，它提供了更强的可控性、表现力和质量，助力开发者、企业和普通用户构建下一代 AI 语音应用。
+
+Starting today, 3.1 Flash TTS is rolling out:
+从今天起，3.1 Flash TTS 将开始推广：
+
+* For developers in preview via the Gemini API and Google AI Studio
+* 面向开发者，通过 Gemini API 和 Google AI Studio 提供预览版
+* For enterprises in preview on Vertex AI
+* 面向企业，通过 Vertex AI 提供预览版
+* For Workspace users via Google Vids
+* 面向 Workspace 用户，通过 Google Vids 提供
+
+Improved speech quality and controllability
+提升语音质量与可控性
+
+We’ve improved the overall speech quality of Gemini 3.1 Flash TTS, making it our most natural and expressive model to date. On the Artificial Analysis TTS leaderboard, a benchmark that captures thousands of blind human preferences, 3.1 Flash TTS achieved an impressive Elo score of 1,211.
+我们提升了 Gemini 3.1 Flash TTS 的整体语音质量，使其成为我们迄今为止最自然、最具表现力的模型。在 Artificial Analysis TTS 排行榜（一项记录了数千次人类盲测偏好的基准测试）中，3.1 Flash TTS 取得了 1,211 分的优异 Elo 分数。
+
+Artificial Analysis has also positioned Gemini 3.1 Flash TTS within its “most attractive quadrant” for its ideal blend of high-quality speech generation and low cost. The model stands out further with native multi-speaker dialogue, support for 70+ languages, and granular creative control via natural language.
+Artificial Analysis 还将 Gemini 3.1 Flash TTS 置于其“最具吸引力象限”中，因为它完美融合了高质量语音生成与低成本优势。该模型还具备原生多说话人对话、支持 70 多种语言以及通过自然语言进行细粒度创意控制等突出特点。
+
+New audio tags for more expressive speech generation
+用于生成更具表现力语音的新型音频标签
+
+3.1 Flash TTS also introduces audio tags — an intuitive way to control vocal style, pace and delivery. By embedding natural language commands directly into the text input, you can steer AI-speech output with improved levels of granularity.
+3.1 Flash TTS 还引入了音频标签——这是一种控制语音风格、语速和表达方式的直观方法。通过将自然语言指令直接嵌入文本输入中，您可以以更高的细粒度来引导 AI 语音输出。
+
+You can start experimenting with these audio tags along with other updates to the developer experience in Google AI Studio with configurable controls that place the developer in the “director’s chair”:
+您现在就可以在 Google AI Studio 中尝试这些音频标签以及其他开发者体验更新，通过可配置的控件，让开发者坐上“导演椅”：
+
+* Scene direction: Set the stage by defining the environment and providing specific dialogue instructions. This world-building context helps characters remain “in-character” and react to one another naturally across multiple turns.
+* 场景指导：通过定义环境和提供具体的对话指令来设定场景。这种世界观构建背景有助于角色保持“人设”，并在多轮对话中自然地相互回应。
+* Speaker-level specificity: Cast characters using unique Audio Profiles, then specify Director’s Notes to toggle pace, tone and accent. Using inline tags, speakers can pivot from these high-level settings to change expression mid-sentence.
+* 说话人层面的具体化：使用独特的音频配置文件（Audio Profiles）来分配角色，然后指定“导演笔记”来切换语速、语调和口音。通过内联标签，说话人可以在这些高级设置的基础上，在句中改变表达方式。
+* Seamless export: Once the performance is perfected, these exact parameters can be exported as Gemini API code to ensure consistent, recognizable voices across various projects and platforms.
+* 无缝导出：一旦表现达到完美，这些精确的参数可以导出为 Gemini API 代码，以确保在各种项目和平台中保持一致且可识别的语音。
+
+With these new configurations, developers can enhance precision for specific scenarios, creating memorable characters and immersive audio experiences. Get started with high-fidelity speech generation in the Google AI Studio Playground.
+通过这些新配置，开发者可以提高特定场景的精确度，创造出令人难忘的角色和沉浸式的音频体验。欢迎在 Google AI Studio Playground 中开始体验高保真语音生成。
+
+Built for global scale
+为全球规模而构建
+
+Gemini 3.1 Flash TTS delivers high-fidelity speech and more precise control across more than 70 languages. These core optimizations bring advanced style, pacing and accent control to major markets — helping developers create localized, expressive speech experiences for users at global scale.
+Gemini 3.1 Flash TTS 在 70 多种语言中提供高保真语音和更精确的控制。这些核心优化为主要市场带来了先进的风格、语速和口音控制，帮助开发者为全球用户创造本地化、富有表现力的语音体验。
+
+Early developer and enterprise testers are already seeing the impact of 3.1 Flash TTS, highlighting its impressive controllability and expressivity. They’ve told us how audio tags provide a new level of creative precision, transforming simple text into a high-fidelity vocal performance.
+早期的开发者和企业测试人员已经看到了 3.1 Flash TTS 的影响，并强调了其令人印象深刻的可控性和表现力。他们告诉我们，音频标签如何提供了一种新的创意精确度，将简单的文本转化为高保真的语音表演。
+
+Watermarked with SynthID
+使用 SynthID 添加水印
+
+All audio generated by Gemini 3.1 Flash TTS is watermarked with SynthID. This imperceptible watermark is interwoven directly into the audio output, allowing the reliable detection of AI-generated content to help prevent misinformation. For more information on our approach to safety and responsibility, you can review the model card.
+所有由 Gemini 3.1 Flash TTS 生成的音频都带有 SynthID 水印。这种不可察觉的水印直接交织在音频输出中，能够可靠地检测 AI 生成的内容，从而帮助防止虚假信息。有关我们安全和责任方法的更多信息，您可以查阅模型卡（model card）。

@@ -1,0 +1,41 @@
+---
+title: "Our position on open-weights models"
+originalUrl: "https://www.anthropic.com/news/position-open-weights-models"
+date: "2026-07-27T22:34:40.465Z"
+---
+
+# Our position on open-weights models
+# 关于我们对开源权重模型的立场
+
+**Announcements | July 27, 2026 | A post by Dario Amodei, Anthropic CEO**
+**公告 | 2026年7月27日 | Anthropic首席执行官 Dario Amodei 撰文**
+
+Over the last few days there has been a lot of discussion about open-weights models, especially those from China. Reports suggest that some US officials are considering banning the use of Chinese open-weights models by US companies. In response, many tech companies have signed a letter supporting open-weights models, and some people have even accused Anthropic of wanting to ban open-weights models as a means of protecting our business. Anyone who has read my past writing should know that I don’t regard such bans as a useful measure, but let me state it clearly so that there is no doubt: Anthropic has never advocated for a ban on open-weights models.
+在过去几天里，关于开源权重（open-weights）模型的讨论非常多，尤其是来自中国的模型。有报道称，一些美国官员正在考虑禁止美国公司使用中国的开源权重模型。对此，许多科技公司签署了一封支持开源权重模型的联名信，甚至有人指责 Anthropic 想要通过禁止开源权重模型来保护我们的业务。任何读过我过去文章的人都应该知道，我不认为这种禁令是有效的措施，但我还是想明确表态，以免产生任何疑虑：Anthropic 从未主张禁止开源权重模型。
+
+Open-weights models that don’t have dangerous capabilities are a public good: they don’t cost anything besides the compute needed to run them, and they provide value to businesses, developers, and researchers.
+不具备危险能力的开源权重模型是一种公共产品：除了运行它们所需的计算成本外，它们几乎没有其他成本，并能为企业、开发者和研究人员提供价值。
+
+Protectionist bans would not address my most serious national security concerns. Specifically, I am worried about two nightmare scenarios. I laid these out in my essay *The Adolescence of Technology* six months ago, and have held these positions consistently for many years:
+保护主义式的禁令并不能解决我最担心的国家安全问题。具体来说，我担心两种噩梦般的场景。我在六个月前的文章《技术的青春期》（*The Adolescence of Technology*）中阐述过这些观点，并且多年来一直坚持这些立场：
+
+My primary concern is the risk that authoritarian governments—not solely the Chinese Communist Party (CCP), although the CCP is clearly the most capable threat—build AI models that are more powerful than those built by the US, and use them to achieve permanent military superiority or perpetrate incredibly deep repression of their own people. This concern is widely shared within the US government: Vice President Vance warned in Paris last year that “authoritarian regimes have stolen and used AI to strengthen their military, intelligence, and surveillance capabilities,” and the Intelligence Community’s 2026 Annual Threat Assessment found that “other global powers’ robust progress in AI is challenging US economic competitiveness and national security advantages.” It is irrelevant whether these models are released with open weights, and certainly irrelevant whether they are used by US businesses. In fact, the most dangerous model may be one that is trained in secret and handed only to the People’s Liberation Army for use in drones and the Ministry of State Security for surveillance and repression.
+我首要的担忧是，威权政府（不仅仅是中国共产党，尽管中共显然是最具威胁的对手）可能会构建出比美国更强大的 AI 模型，并利用它们实现永久的军事优势，或对其本国人民实施极其深重的压迫。这种担忧在美国政府内部广为流传：万斯副总统去年在巴黎警告称，“威权政权已经窃取并利用 AI 来加强其军事、情报和监视能力”，情报界 2026 年的年度威胁评估也发现，“其他全球大国在 AI 领域的强劲进展正在挑战美国的经济竞争力和国家安全优势”。这些模型是否以开源权重形式发布并不重要，更与美国企业是否使用它们无关。事实上，最危险的模型可能是那些秘密训练并仅提供给中国人民解放军用于无人机，或提供给国家安全部用于监视和压迫的模型。
+
+My secondary concern is the risk that powerful AI models may be misused to carry out cyberattacks or biological attacks, and may have serious alignment problems. Open-weights models—it does not matter whether they come from China or anywhere else—do potentially present a higher risk than closed models, because it is very difficult to apply guardrails to them or monitor their usage, and once weights are released they cannot be withdrawn. But banning the use of these models by US businesses does nothing to address this risk, because bad actors are unlikely to be legitimate US businesses. It would protect US AI companies from competition, but that has never been my goal.
+我的第二个担忧是，强大的 AI 模型可能被滥用于发动网络攻击或生物攻击，并可能存在严重的对齐问题。开源权重模型——无论它们来自中国还是其他任何地方——确实比闭源模型具有更高的潜在风险，因为很难对它们施加护栏或监控其使用情况，而且一旦权重发布，就无法撤回。但禁止美国企业使用这些模型并不能解决这一风险，因为恶意行为者不太可能是合法的美国企业。这虽然能保护美国 AI 公司免受竞争，但这从来不是我的目标。
+
+To address these concerns, I do support the following three measures, which I and Anthropic have consistently advocated for:
+为了解决这些担忧，我确实支持以下三项措施，这也是我和 Anthropic 一贯主张的：
+
+We should not sell powerful chips or chipmaking equipment to China, and we should crack down on the rampant smuggling and workarounds used to obtain access to such chips. China has limited domestic production capacity, and therefore, due to the scaling laws, cannot build more powerful models than the US without US chips. This is the most efficient and direct way to block threat #1, and by hampering the training of models that are out of reach of US law, it also indirectly helps with threat #2.
+我们不应向中国出售高性能芯片或芯片制造设备，并应打击用于获取此类芯片的猖獗走私和变通手段。中国的国内生产能力有限，因此，根据缩放定律（scaling laws），如果没有美国芯片，他们无法构建出比美国更强大的模型。这是阻止第一个威胁最有效、最直接的方法，通过阻碍那些不受美国法律约束的模型的训练，这也间接有助于解决第二个威胁。
+
+We should crack down on industrial-scale distillation operations. Distillation is a much more compute-efficient process than training models from scratch. It allows China to build much better models than its number of chips would ordinarily enable, and thus partially evade chip bans. Distillation does not allow the CCP to obtain equivalent or superior AI capabilities to the US, but it can bring the Chinese frontier to within a few months of the US frontier. It is true that many of the companies carrying out these operations release open-weights models—but the open weights are far less relevant than the fact that the operations are backed by an authoritarian state seeking to overtake the US at the frontier. We should have policy interventions to deter this behavior. A blanket ban on open-weights models is neither the correct remedy nor something we have called for.
+我们应该打击工业规模的蒸馏（distillation）操作。与从零开始训练模型相比，蒸馏是一种计算效率高得多的过程。它使中国能够构建出远超其现有芯片数量所能支持的更优模型，从而部分规避芯片禁令。蒸馏并不能让中共获得与美国相当或更优的 AI 能力，但它可以将中国的技术前沿与美国的差距缩小到几个月内。诚然，许多进行这些操作的公司确实发布了开源权重模型——但开源权重本身远不如这些操作背后有威权国家支持、试图在技术前沿超越美国这一事实重要。我们应该采取政策干预来遏制这种行为。全面禁止开源权重模型既不是正确的补救措施，也不是我们所呼吁的。
+
+All sufficiently capable models, open and closed, should go through mandatory safety testing. The best way to address threat #2 is to just directly test models for cyber, biological, and alignment risks before release. I think this idea is actually close to a consensus: I have been heartened both that the Trump administration has moved in this direction in recent months, and by recent industry proposals that would apply such testing to the most capable models regardless of their country of origin or whether they are open or closed (while exempting less capable models, such as those from startups and academia, entirely). Whether open models do or don’t pose an increased risk, and whether that risk can be mitigated, is something that should emerge from testing, rather than be decided in advance—and there may be promising methods for improving the safety of open-weights models, including recent research from Anthropic on modular training strategies. Note that to be effective, testing would need to be global, which means even the CCP would need to be on board. I think this may actually be possible: as I wrote in *The Adolescence of Technology*, limited cooperation around preventing AI biological weapons may be possible because it is in China’s interest too.
+所有具备足够能力的模型，无论是开源还是闭源，都应通过强制性的安全测试。解决第二个威胁的最佳方法是在发布前直接对模型进行网络、生物和对齐风险测试。我认为这个想法实际上已接近共识：我感到欣慰的是，特朗普政府近几个月来已朝着这个方向迈进，且最近的行业提案也建议对最强大的模型进行此类测试，无论其原产国如何，也无论其是开源还是闭源（同时完全豁免能力较弱的模型，如初创公司和学术界开发的模型）。开源模型是否构成更高风险，以及该风险能否被缓解，应该通过测试得出结论，而不是预先决定——而且可能存在改善开源权重模型安全性的有效方法，包括 Anthropic 最近关于模块化训练策略的研究。请注意，要使测试有效，必须是全球性的，这意味着甚至中共也需要参与其中。我认为这实际上是可能的：正如我在《技术的青春期》中所写，围绕防止 AI 生物武器进行有限的合作是可能的，因为这同样符合中国的利益。
+
+This brings me to the open letter. I agree with much of it: open weights expand access to the AI economy, they strengthen competition at least for some use cases, and they give customers greater control.
+这让我谈到了那封公开信。我同意其中的大部分内容：开源权重扩大了对 AI 经济的参与，它们至少在某些用例中加强了竞争，并赋予了客户更大的控制权。

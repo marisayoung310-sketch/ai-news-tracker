@@ -1,0 +1,38 @@
+---
+title: "Ex-Anduril engineer raises $42M to build the Amazon of composite parts"
+originalUrl: "https://techcrunch.com/2026/06/02/ex-anduril-engineer-raises-42m-to-build-the-amazon-of-composite-parts/"
+date: "2026-06-02T23:14:31.659Z"
+---
+
+# Ex-Anduril engineer raises $42M to build the Amazon of composite parts
+# 前 Anduril 工程师融资 4200 万美元，旨在打造复合材料界的“亚马逊”
+
+Before Zack Eakin sold investors on his new startup, he practiced on Palmer Luckey. When Eakin left Luckey’s defense startup, Anduril, in 2024 to start a new composites company called Layup Parts, Luckey — along with Anduril co-founders Brian Schimpf and Matt Grimm — let him workshop the pitch. He got different feedback from each, Eakin told TechCrunch. Grimm helped him think about how to pitch VCs, Schimpf (Anduril’s CEO) pushed him on strategy, while Luckey — ever the fundraiser — guided him on the storytelling.
+在 Zack Eakin 向投资者推销他的新创公司之前，他先在 Palmer Luckey 身上进行了“演练”。2024 年，当 Eakin 离开 Luckey 的国防初创公司 Anduril 并创立名为 Layup Parts 的复合材料公司时，Luckey 以及 Anduril 的联合创始人 Brian Schimpf 和 Matt Grimm 让他对推介方案进行了打磨。Eakin 告诉 TechCrunch，他从每个人那里得到了不同的反馈：Grimm 帮他思考如何向风投推介，Schimpf（Anduril 的首席执行官）在战略上对他提出了要求，而 Luckey 则发挥他一贯擅长的融资能力，指导他如何讲好故事。
+
+This miniature boot camp appears to have worked. Two years ago, Eakin raised a $9 million seed round. The startup announced Tuesday it has raised another $42 million in a Series A funding round led by dual-use venture fund Marlinspike, with participation from new investors Cerberus Ventures and Pinegrove Venture Partners, and existing backers Founders Fund and Lux Capital. It’s a tidy sum for the Huntington Beach, California, startup, which employs just 60 people or so.
+这个“迷你训练营”似乎奏效了。两年前，Eakin 完成了 900 万美元的种子轮融资。周二，该公司宣布已完成 4200 万美元的 A 轮融资，由军民两用风险投资基金 Marlinspike 领投，新投资者 Cerberus Ventures 和 Pinegrove Venture Partners，以及现有投资者 Founders Fund 和 Lux Capital 跟投。对于这家位于加利福尼亚州亨廷顿海滩、仅有约 60 名员工的初创公司来说，这是一笔可观的资金。
+
+And much of it will go toward people. Layup Parts used most of its seed money on capital expenditures. Eakin wants to use the new funding to grow the startup’s ranks and move into a bigger facility this year. The goal is to make ordering custom parts made of carbon fiber or fiberglass as easy as if they were sold on Amazon.
+这笔资金的大部分将用于人才招聘。Layup Parts 此前将大部分种子资金用于资本支出。Eakin 希望利用这笔新资金扩大团队规模，并在今年搬入更大的工厂。他的目标是让定制碳纤维或玻璃纤维零件的订购过程变得像在亚马逊上购物一样简单。
+
+Eakin has been working with composite materials for around two decades, dating back to his time in motorsports, he told TechCrunch. The engineer started his professional career at Chip Ganassi Racing, where he worked with carbon-fiber structures and bodywork, especially for the company’s IndyCar entries and the radical (and radically controversial) DeltaWing prototype. Eakin took a bit of a detour to become the first engineer at Elon Musk’s Boring Company in 2017. But by 2021, he was once again elbow-deep in composites when he took the role at Anduril.
+Eakin 告诉 TechCrunch，他从事复合材料行业已有约二十年，这段经历可以追溯到他在赛车运动领域工作的时期。这位工程师的职业生涯始于 Chip Ganassi Racing，在那里他负责碳纤维结构和车身工作，特别是为该公司的 IndyCar 赛车以及激进（且极具争议）的 DeltaWing 原型车工作。2017 年，Eakin 绕道成为 Elon Musk 旗下 Boring Company 的首位工程师。但到了 2021 年，当他加入 Anduril 时，他又重新投身于复合材料领域。
+
+It was at that point Eakin realized how, during his time digging tunnels, something of a revolution had started in the worlds of industrial fabrication and manufacturing. Startups like SendCutSend and Protolabs had dramatically reduced the time and cost required to prototype and ship parts to customers. But no one was doing this for composites, he said. “It just kind of dawned on me that, like, all these other manufacturing verticals are getting better, [and] we are struggling to find people to make our composite parts for us,” Eakin said. “Why is there nobody trying to make this better?”
+就在那时，Eakin 意识到，在他挖掘隧道的这段时间里，工业制造领域已经发生了一场革命。像 SendCutSend 和 Protolabs 这样的初创公司已经大幅缩短了原型设计和向客户交付零件所需的时间和成本。但他表示，没有人为复合材料行业做这件事。“我突然意识到，其他所有制造垂直领域都在进步，而我们却很难找到人来为我们制造复合材料零件，”Eakin 说，“为什么没有人尝试改善这一点呢？”
+
+It’s not that Eakin didn’t know the answer. Composites tend to be harder to deal with in general — or, as he put it, there are “a lot more fingers and eyeballs involved.” Plus, there had been a lot of consolidation among composite companies, according to Eakin. This meant bigger firms were less likely to try to innovate and risk their dependable revenue streams. And even if they wanted to, he said, these companies don’t have the software talent to build the tools required to reach that goal of getting to a one- or even zero-click solution.
+并不是 Eakin 不知道答案。复合材料通常更难处理——或者正如他所说，这涉及“更多的人工干预和检查”。此外，据 Eakin 称，复合材料公司之间进行了大量的整合。这意味着大型企业不太可能尝试创新并冒着破坏其稳定收入来源的风险。他说，即使他们想这样做，这些公司也没有足够的软件人才来构建实现“一键式”甚至“零点击”解决方案所需的工具。
+
+“If we have stock materials, and you have a good understanding of those materials, we can build software that has an order of magnitude reduction in the amount of clicking it takes for an engineer to produce those — and ultimately gets to zero clicks, where it just takes customer data and poops out shapes,” he said with a smile. Eakin said it became obvious that the best way to do this was to start a whole new composites company and that these challenges made the idea all the more valuable.
+“如果我们有库存材料，并且你对这些材料有很好的了解，我们就可以开发出软件，将工程师生产这些零件所需的点击次数减少一个数量级——最终实现零点击，即直接接收客户数据并自动生成形状，”他笑着说。Eakin 表示，显而易见，实现这一目标的最佳方式就是创办一家全新的复合材料公司，而这些挑战反而让这个想法变得更有价值。
+
+“I just decided this might be the best thing I can do for Anduril, is to go fix this part of the supply chain, because I don’t think it’s just an Anduril problem,” he said. So far, he’s been right. In the two years since Eakin founded Layup Parts, his team has been rapidly prototyping and producing parts for a variety of customers, including motorsports, design studios making show cars, and even pickleball paddle companies. The company has already cut the time between receiving customer data and manufacturing a part down from weeks to hours in some cases.
+“我决定，我能为 Anduril 做的最好的事情可能就是去修复供应链的这一环节，因为我不认为这只是 Anduril 一家的问题，”他说。到目前为止，他是对的。在 Eakin 创立 Layup Parts 的两年里，他的团队一直在为各种客户快速进行原型设计和生产零件，包括赛车运动、制作展示车的各种设计工作室，甚至还有匹克球拍公司。在某些情况下，该公司已经将从接收客户数据到制造出零件的时间从几周缩短到了几小时。
+
+The biggest business lines, unsurprisingly, are aerospace and defense. That includes both startups and the more traditional defense primes, according to Eakin. The opportunity is evident in the cap table. There’s the lead backer Marlinspike, which is already invested in Anduril and a number of other defense-focused manufacturing companies. Cerberus Ventures was started in 2023 by Chris Darby, who spent nearly 20 years running the CIA-backed venture firm In-Q-Tel.
+不出所料，最大的业务线是航空航天和国防。Eakin 表示，这既包括初创公司，也包括更传统的国防承包商。这种机会在资本结构中显而易见。领投方 Marlinspike 已经投资了 Anduril 和其他多家专注于国防的制造公司。Cerberus Ventures 由 Chris Darby 于 2023 年创立，他曾花了近 20 年时间管理中情局支持的风险投资公司 In-Q-Tel。
+
+While Eakin looks back fondly on what he learned from Anduril and its leaders, he’s also carrying over skills he learned at The Boring Company. Despite not working with composites there, he said a lot still applies to a startup. Working at The Boring Company involved a lot of “first-principles engineering stuff, very similar to what we would do in racing,” he said. “Elon has a very high sense of urgency, so as much as it was a new type of thing to make, it felt familiar with the crazy deadlines and just developing stuff as fast as you can,” he said.
+虽然 Eakin 对他在 Anduril 及其领导者身上学到的东西怀有美好的回忆，但他也将从 The Boring Company 学到的技能带到了新公司。尽管在那里没有接触复合材料，但他表示很多经验仍然适用于初创公司。他说，在 The Boring Company 工作涉及很多“第一性原理工程，这与我们在赛车运动中所做的非常相似”。“Elon 有非常强烈的紧迫感，所以尽管这是制造一种新事物，但面对疯狂的截止日期和尽可能快地开发产品，这种感觉很熟悉，”他说。

@@ -1,0 +1,195 @@
+{
+  "sources": [
+    {
+      "name": "Hacker News",
+      "type": "api",
+      "plugin": "hackernews",
+      "maxItems": 15,
+      "enabled": true,
+      "options": {
+        "storyType": "top"
+      }
+    },
+    {
+      "name": "TechCrunch",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://techcrunch.com/feed/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "The Verge",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Ars Technica",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Product Hunt",
+      "type": "api",
+      "plugin": "producthunt",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "MIT Technology Review",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://www.technologyreview.com/feed/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "GitHub Trending",
+      "type": "crawler",
+      "plugin": "github-trending",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "OpenAI Blog",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://openai.com/blog/rss.xml",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Anthropic Blog",
+      "type": "crawler",
+      "plugin": "anthropic",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Google AI Blog",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://blog.google/technology/ai/rss/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Hugging Face Blog",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "The Gradient",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://thegradient.pub/rss/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "arXiv CS.AI",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://arxiv.org/rss/cs.AI",
+      "maxItems": 8,
+      "enabled": true
+    },
+    {
+      "name": "arXiv CS.CL",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://arxiv.org/rss/cs.CL",
+      "maxItems": 8,
+      "enabled": true
+    },
+    {
+      "name": "WIRED",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://www.wired.com/feed/rss",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Lobsters",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://lobste.rs/rss",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "DEV Community",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://dev.to/feed",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Meta Engineering",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://engineering.fb.com/feed/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "DeepMind Blog",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://deepmind.google/blog/rss.xml",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Microsoft AI Blog",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://blogs.microsoft.com/ai/feed/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "VentureBeat AI",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://venturebeat.com/category/ai/feed/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "arXiv CS.LG",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://arxiv.org/rss/cs.LG",
+      "maxItems": 8,
+      "enabled": true
+    },
+    {
+      "name": "arXiv CS.CV",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://arxiv.org/rss/cs.CV",
+      "maxItems": 8,
+      "enabled": true
+    },
+    {
+      "name": "Towards Data Science",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://towardsdatascience.com/feed",
+      "maxItems": 10,
+      "enabled": true
+    }
+  ]
+}

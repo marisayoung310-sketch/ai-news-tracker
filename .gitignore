@@ -1,0 +1,24 @@
+# .gitignore
+node_modules/
+.pnpm-store/
+dist/
+.astro/
+.wrangler/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Upstream assistant-specific instructions are not part of the app
+.claude/
