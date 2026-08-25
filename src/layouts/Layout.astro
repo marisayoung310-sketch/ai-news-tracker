@@ -112,6 +112,15 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
       });
 
       // External links open in new tab
+      const siteBase = import.meta.env.BASE_URL.replace(/\/$/, '');
+      if (siteBase) {
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="/"]').forEach(a => {
+          if (!a.pathname.startsWith(`${siteBase}/`) && a.pathname !== siteBase) {
+            a.href = `${siteBase}${a.pathname}${a.search}${a.hash}`;
+          }
+        });
+      }
+
       document.querySelectorAll('a[href^="http"]').forEach(a => {
         if (!a.hostname.includes(location.hostname)) {
           a.setAttribute('target', '_blank');
